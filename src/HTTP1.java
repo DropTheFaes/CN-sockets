@@ -22,4 +22,9 @@ public class HTTP1 extends HTTP{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	protected int getHttpVersion() {
+		return 1;
+	}
 }

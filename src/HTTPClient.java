@@ -32,7 +32,7 @@ public class HTTPClient {
 		String command = args[0];
 		String url = args[1];
 		int port = Integer.parseInt(args[2]);
-		int httpVersion = Integer.parseInt(args[3].split(".")[1]);
+		int httpVersion = Integer.parseInt(args[3].substring(7, 8));
 		
 		HTTP http = null;
 		if(httpVersion == 0){

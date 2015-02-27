@@ -39,13 +39,13 @@ public abstract class HTTP {
 	
 	public void sendRequest(){
         try{
-        	String sentence = ""; //TODO sentence is wat naar de server gestuurd moet worden
+        	String sentence = this.command + " / " + "HTTP/1." + this.getHttpVersion(); //sentence is wat naar de server gestuurd moet worden
         	outToServer.writeBytes(sentence + '\n');
 			
         	handleResponse();
 		
 		} catch (IOException e) {
-		// TODO moet wss iets anders zijn
+		// TODO juist?
 		System.out.println("No server found on this portnumber.");
 		}
 	}
@@ -84,5 +84,5 @@ public abstract class HTTP {
 	protected abstract void handlePutResponse();
 	protected abstract void handlePostResponse();
 	
-	
+	protected abstract int getHttpVersion();
 }

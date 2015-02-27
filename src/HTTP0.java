@@ -25,4 +25,9 @@ public class HTTP0 extends HTTP{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	protected int getHttpVersion() {
+		return 0;
+	}
 }
