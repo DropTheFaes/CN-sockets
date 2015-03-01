@@ -1,0 +1,3 @@
+- command per command? of moet onze code er ook rekening mee houden dat de connection nog open is na een request met HTTP 1.1?
+
+- hoe POST-command uitproberen?
