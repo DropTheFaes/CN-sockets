@@ -40,7 +40,10 @@ public abstract class HTTP {
 	public void sendRequest(){
         try{
         	String sentence = this.command + " / " + "HTTP/1." + this.getHttpVersion(); //sentence is wat naar de server gestuurd moet worden
-        	outToServer.writeBytes(sentence + '\n' + '\n');
+        	outToServer.writeBytes(sentence + '\n' + '\n'); //TODO als tweede '\n' niet nodig is bij POST: 
+        													//zendt die apart in specifieke 'handlerequest'-methode, 
+        													//of extra methode 'sendrequestspecific' die erbijgezet wordt in 
+        													//de case bij 'handleresponse'-methode 
 			
         	handleResponse();
         	
