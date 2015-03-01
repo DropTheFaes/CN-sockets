@@ -40,9 +40,11 @@ public abstract class HTTP {
 	public void sendRequest(){
         try{
         	String sentence = this.command + " / " + "HTTP/1." + this.getHttpVersion(); //sentence is wat naar de server gestuurd moet worden
-        	outToServer.writeBytes(sentence + '\n');
+        	outToServer.writeBytes(sentence + '\n' + '\n');
 			
         	handleResponse();
+        	
+        	//close streams & socket?? (--> hangt af van antwoord assistent op vraag over of connection moet openblijven)
 		
 		} catch (IOException e) {
 		// TODO juist?
@@ -68,7 +70,7 @@ public abstract class HTTP {
 	}
 	
 	protected void handleHeadResponse() throws IOException{
-		PrintWriter writer = new PrintWriter("headResponse.txt", "UTF-8");
+		PrintWriter writer = new PrintWriter("headResponse.txt"); //, "UTF-8"
 		ArrayList<String> response = new ArrayList<String>();
 		String line = null;
 		while((line = this.inFromServer.readLine()) != null){
@@ -78,10 +80,13 @@ public abstract class HTTP {
 			System.out.println(responseLine);
 			writer.println(responseLine);
 		}
+		writer.close();
 	}
 	
 	protected abstract void handleGetResponse();
+	
 	protected abstract void handlePutResponse();
+	
 	protected abstract void handlePostResponse();
 	
 	protected abstract int getHttpVersion();
