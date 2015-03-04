@@ -22,7 +22,6 @@ public abstract class HTTP {
 	public HTTP(String command, String url, int port){
 		this.command = command;
 		this.port = port;
-		
 		this.url = url.split("/")[0];	
 		if(url.split("/").length < 2){
 			this.path = "";
@@ -75,10 +74,10 @@ public abstract class HTTP {
 				handleGetResponse();
 				break;
 			case "PUT":
-				handlePutResponse();
+				handlePutPostResponse();
 				break;
 			case "POST":
-				handlePostResponse();
+				handlePutPostResponse();
 				break;
 		}
 	}
@@ -99,9 +98,7 @@ public abstract class HTTP {
 	
 	protected abstract void handleGetResponse();
 	
-	protected abstract void handlePutResponse();
-	
-	protected void handlePostResponse() throws IOException{
+	protected void handlePutPostResponse() throws IOException{
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Give a String for input, please:");
 		String input = scan.nextLine();

@@ -10,18 +10,6 @@ public class HTTP1 extends HTTP{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-	protected void handlePutResponse() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	protected void handlePostResponse() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	protected int getHttpVersion() {

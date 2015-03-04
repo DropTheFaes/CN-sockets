@@ -15,18 +15,6 @@ public class HTTP0 extends HTTP{
 	}
 	
 	@Override
-	protected void handlePutResponse() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	@Override
-	protected void handlePostResponse() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	protected int getHttpVersion() {
 		return 0;
 	}
