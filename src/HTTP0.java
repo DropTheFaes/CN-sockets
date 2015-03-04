@@ -50,8 +50,8 @@ public class HTTP0 extends HTTP{
 		
 		//url splitten op punten, zodat we 'google' of 'example' kunnen gebruiken in de filename van de file waarin we de html-file opslaan
 		String siteURL = url.split("\\.")[0];
-		if (siteURL == "www"){
-			siteURL = url.split(".")[1];
+		if (siteURL.equals("www")){
+			siteURL = url.split("\\.")[1];
 		}
 		
 		File f = null;
@@ -109,7 +109,7 @@ public class HTTP0 extends HTTP{
 			System.out.println("2"); //TODO check
 		}
 		
-		byte[] buffer = new byte[1024];
+		byte[] buffer = new byte[2048];
 		int n;
 		while((n = dataInFromServer.read(buffer)) != -1){
 			outPutStream.write(buffer,0,n);
