@@ -3,6 +3,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 //import org.jsoup.Jsoup;
 //import org.jsoup.nodes.Document;
 //import org.jsoup.select.Elements;
@@ -43,7 +48,7 @@ public class HTTP0 extends HTTP{
 		// 		GET doet dat automatisch met de 'If-Modified-Since'-header die we sturen na de eerste 'enter' na de GET-request
 		
 		//url splitten op punten, zodat we 'google' of 'example' kunnen gebruiken in de filename van de file waarin we de html-file opslaan
-		String siteURL = url.split(".")[0];
+		String siteURL = url.split("\\.")[0];
 		if (siteURL == "www"){
 			siteURL = url.split(".")[1];
 		}
@@ -75,13 +80,15 @@ public class HTTP0 extends HTTP{
 	}
 	
 	protected void getImages(File f) throws IOException{
-//		ArrayList imageSources = new ArrayList();
-//		
-//		Document doc = Jsoup.parse(f, "UTF-8");
-//		Elements images = doc.select("img");
-//		for(Element image:images){
-//			
-//		}
+		ArrayList imageSources = new ArrayList();
+		
+		Document doc = Jsoup.parse(f, "UTF-8");
+		Elements images = doc.select("img");
+		
+		for(Element image: images){
+			System.out.println(image.attr("src")); //TODO is gewoon een check, dus mag nog weg
+			imageSources.add(image.attr("src"));
+		}
 		
 	}
 	
