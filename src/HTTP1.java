@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 
 public class HTTP1 extends HTTP{
@@ -37,6 +38,12 @@ public class HTTP1 extends HTTP{
 
 	@Override
 	protected void getImages(File f) throws IOException{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	protected void getImage(String imageSource) throws UnknownHostException, IOException{
 		// TODO Auto-generated method stub
 		
 	}

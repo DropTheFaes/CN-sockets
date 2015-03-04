@@ -89,6 +89,8 @@ public abstract class HTTP {
 	
 	protected abstract void getImages(File f) throws IOException;
 	
+	protected abstract void getImage(String imageSource) throws UnknownHostException, IOException;
+	
 	protected void handlePutPostResponse() throws IOException{
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Give a String for input, please:");

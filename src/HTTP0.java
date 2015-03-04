@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
@@ -85,24 +86,24 @@ public class HTTP0 extends HTTP{
 	}
 	
 	protected void getImages(File f) throws IOException{
-		ArrayList imageSources = new ArrayList();
-		
 		Document doc = Jsoup.parse(f, "UTF-8");
 		Elements images = doc.select("img");
 		
 		for(Element image: images){
-			System.out.println(image.attr("src")); //TODO check
-			imageSources.add(image.attr("src"));
+			getImage(image.attr("src"));
 		}
-			
-		//getImage
+	}
+	
+	protected void getImage(String imageSource) throws UnknownHostException, IOException{
+		String imageName = imageSource.split("/")[imageSource.split("/").length-1];
+		
 		this.socket = new Socket(this.url, this.port);
 		this.dataInFromServer = new DataInputStream(socket.getInputStream());
 		this.outToServer = new DataOutputStream(socket.getOutputStream());
 		this.outPutStream = new ByteArrayOutputStream();
-		FileOutputStream toFile = new FileOutputStream("image.png");//TODO imagetype?
+		FileOutputStream toFile = new FileOutputStream(imageName);
 				
-		String getImageSentence = "GET " + imageSources.get(0) +" HTTP/1.0" + "\n";
+		String getImageSentence = "GET " + imageSource +" HTTP/1.0" + "\n";
 		try {
 			outToServer.writeBytes(getImageSentence + "\n");
 		} catch (Exception e) {
@@ -119,6 +120,7 @@ public class HTTP0 extends HTTP{
 		
 		socket.close();
 		dataInFromServer.close();
+		outToServer.close();
 		outPutStream.close();
 		toFile.close();
 	}
