@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -19,17 +21,18 @@ public abstract class HTTP {
 	protected DataOutputStream outToServer;
 	protected BufferedReader inFromServer;
 	
-	public HTTP(String command, String url, int port){
+	public HTTP(String command, String givenUrl, int port){
 		this.command = command;
 		this.port = port;
-		this.url = url.split("/")[0];	
-		if(url.split("/").length < 2){
+		this.url = givenUrl.split("/")[0];	
+		if(givenUrl.split("/").length < 2){
 			this.path = "";
 		}
 		else{
-			this.path = url.split("/")[1];
+			this.path = givenUrl.replace(url, "");
+			this.path = (String) this.path.subSequence(1, this.path.length()-1);
 		}
-		
+
 		try {
 			this.socket = new Socket(this.url, this.port);
 			
@@ -48,10 +51,7 @@ public abstract class HTTP {
 	public void sendRequest(){
         try{
         	String sentence = this.command + " /" + this.path + " HTTP/1." + this.getHttpVersion(); //sentence is wat naar de server gestuurd moet worden
-        	outToServer.writeBytes(sentence + '\n' + '\n'); //TODO als tweede '\n' niet nodig is bij POST: 
-        													//zend die apart in specifieke 'handlerequest'-methode, 
-        													//of extra methode 'sendrequestspecific' die erbijgezet wordt in 
-        													//de case bij 'handleresponse'-methode 
+        	outToServer.writeBytes(sentence + '\n');
 			
         	handleResponse();
         	
@@ -65,25 +65,10 @@ public abstract class HTTP {
 		}
 	}
 	
-	private void handleResponse() throws IOException{
-		switch (this.command){
-			case "HEAD":
-				handleHeadResponse();
-				break;
-			case "GET":
-				handleGetResponse();
-				break;
-			case "PUT":
-				handlePutPostResponse();
-				break;
-			case "POST":
-				handlePutPostResponse();
-				break;
-		}
-	}
+	protected abstract void handleResponse() throws IOException;
 	
 	protected void handleHeadResponse() throws IOException{
-		PrintWriter writer = new PrintWriter("headResponse.txt"); //, "UTF-8"
+		PrintWriter writer = new PrintWriter("headResponse.txt");
 		ArrayList<String> response = new ArrayList<String>();
 		String line = null;
 		while((line = this.inFromServer.readLine()) != null){
@@ -96,7 +81,9 @@ public abstract class HTTP {
 		writer.close();
 	}
 	
-	protected abstract void handleGetResponse();
+	protected abstract void handleGetResponse() throws IOException;
+	
+	protected abstract void getImages(File f) throws IOException;
 	
 	protected void handlePutPostResponse() throws IOException{
 		Scanner scan = new Scanner(System.in);
