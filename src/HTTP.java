@@ -1,4 +1,6 @@
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,6 +22,8 @@ public abstract class HTTP {
 	protected Socket socket;
 	protected DataOutputStream outToServer;
 	protected BufferedReader inFromServer;
+	protected DataInputStream dataInFromServer;
+	protected ByteArrayOutputStream outPutStream;
 	
 	public HTTP(String command, String givenUrl, int port){
 		this.command = command;
