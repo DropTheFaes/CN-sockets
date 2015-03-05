@@ -9,10 +9,16 @@ import java.util.Scanner;
 public class HTTPClient {
 
 	/**
+	 * Main method to set up HTTPClient
+	 * 
 	 * @param args[0] = command
+	 * 		The HTTP-command that needs to be executed.
 	 * @param args[1] = URI
+	 * 		The URI to get data from.
 	 * @param args[2] = Port
+	 * 		The port to connect to.
 	 * @param args[3] = HTTPVersion
+	 * 		The version of HTTP that is used.
 	 */
 	public static void main(String[] args) {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
