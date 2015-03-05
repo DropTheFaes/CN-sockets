@@ -110,12 +110,12 @@ public abstract class HTTP {
 	 * Handle the GET-response.
 	 * 
 	 * @throws IOException
-	 * 		When the writer receives invalid input, throw IOException.
+	 * 		If the writer receives invalid input, throw IOException.
 	 */
 	protected abstract void handleGetResponse() throws IOException;
 	
 	/**
-	 * Return the images from the given file.
+	 * Retrieve the images from the given file.
 	 * 
 	 * @param f
 	 * 		The file from which the images need to be retrieved.
@@ -126,7 +126,7 @@ public abstract class HTTP {
 	protected abstract void getImages(File f) throws IOException;
 	
 	/**
-	 * Return the images from the given source.
+	 * Retrieve the images from the given source.
 	 * 
 	 * @param imageSource
 	 * 		The source from which the images need to be retrieved.

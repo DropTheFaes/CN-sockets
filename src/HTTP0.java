@@ -17,10 +17,26 @@ import org.jsoup.select.Elements;
 
 public class HTTP0 extends HTTP{
 	
+	/**
+	 * Initialize the HTTP-version to HTTP 1.0 with the given command, given url and given port.
+	 * 
+	 * @param command
+	 * 		The command that needs to be handled.
+	 * @param url
+	 * 		The url on which the given command needs to be executed.
+	 * @param port
+	 * 		The port that needs to be accessed.
+	 */
 	public HTTP0(String command, String url, int port){
 		super(command, url, port);
 	}
 
+	/**
+	 * Handle the response from the command.
+	 * 
+	 * @throws IOException
+	 * 		If the command is not known, throw IOException.
+	 */
 	@Override
 	protected void handleResponse() throws IOException{
 		switch (this.command){
@@ -41,6 +57,12 @@ public class HTTP0 extends HTTP{
 		}
 	}
 	
+	/**
+	 * Handle the GET-response for HTTP 1.0.
+	 * 
+	 * @throws IOException
+	 * 		If the writer receives invalid input, throw IOException.
+	 */
 	@Override
 	protected void handleGetResponse() throws IOException {
 		//rekening houden met If-Modified-Since:
@@ -85,6 +107,15 @@ public class HTTP0 extends HTTP{
 		//}
 	}
 	
+	/**
+	 * Retrieve the images from the given file and append them to a file.
+	 * 
+	 * @param f
+	 * 		The file from which the images need to be retrieved.
+	 * 
+	 * @throws IOException
+	 * 		If the document receives invalid input, throw IOException.
+	 */
 	protected void getImages(File f) throws IOException{
 		Document doc = Jsoup.parse(f, "UTF-8");
 		Elements images = doc.select("img");
@@ -94,6 +125,17 @@ public class HTTP0 extends HTTP{
 		}
 	}
 	
+	/**
+	 * Retrieve the images from the given source and append them to a file.
+	 * 
+	 * @param imageSource
+	 * 		The source from which the images need to be retrieved.
+	 * 
+	 * @throws UnknownHostException
+	 * 		If the given source has an unknown host, trhow UnknownHostException
+	 * @throws IOException
+	 * 		If the writer receives invalid input, throw IOException.
+	 */
 	protected void getImage(String imageSource) throws UnknownHostException, IOException{
 		String imageName = imageSource.split("/")[imageSource.split("/").length-1];
 		
@@ -125,6 +167,11 @@ public class HTTP0 extends HTTP{
 		toFile.close();
 	}
 	
+	/**
+	 * Return the HTTP-version.
+	 * 
+	 * @return The HTTP-version.
+	 */
 	@Override
 	protected int getHttpVersion() {
 		return 0;
