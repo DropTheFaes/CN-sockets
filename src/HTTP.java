@@ -12,7 +12,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+/**
+ * Super class for HTTP.
+ */
 public abstract class HTTP {
 
 	protected String command;
@@ -25,10 +27,20 @@ public abstract class HTTP {
 	protected DataInputStream dataInFromServer;
 	protected ByteArrayOutputStream outPutStream;
 	
-	public HTTP(String command, String givenUrl, int port){
+	/**
+	 * Initialize the HTTP-version with the given command, given URL and given port.
+	 * 
+	 * @param command
+	 * 		The command that needs to be handled.
+	 * @param givenURL
+	 * 		The URL to which the command that needs to be handled applies.
+	 * @param port
+	 * 		The port that needs to be accessed.
+	 */
+	public HTTP(String command, String givenURL, int port){
 		this.command = command;
 		this.port = port;
-		this.url = givenUrl.split("/")[0];	
+		this.url = givenURL.split("/")[0];	
 		if(givenUrl.split("/").length < 2){
 			this.path = "";
 		}
@@ -52,6 +64,9 @@ public abstract class HTTP {
 		}
 	}
 	
+	/**
+	 * Send the command to the chosen HTTP version with the given path.
+	 */
 	public void sendRequest(){
         try{
         	String sentence = this.command + " /" + this.path + " HTTP/1." + this.getHttpVersion(); //sentence is wat naar de server gestuurd moet worden
@@ -71,6 +86,12 @@ public abstract class HTTP {
 	
 	protected abstract void handleResponse() throws IOException;
 	
+	/**
+	 * Handle the HEAD-response.
+	 * 
+	 * @throws IOException
+	 * 		When the writer receives invalid input, throw IOException.
+	 */
 	protected void handleHeadResponse() throws IOException{
 		PrintWriter writer = new PrintWriter("headResponse.txt");
 		ArrayList<String> response = new ArrayList<String>();
@@ -85,12 +106,44 @@ public abstract class HTTP {
 		writer.close();
 	}
 	
+	/**
+	 * Handle the GET-response.
+	 * 
+	 * @throws IOException
+	 * 		When the writer receives invalid input, throw IOException.
+	 */
 	protected abstract void handleGetResponse() throws IOException;
 	
+	/**
+	 * Return the images from the given file.
+	 * 
+	 * @param f
+	 * 		The file from which the images need to be retrieved.
+	 * 
+	 * @throws IOException
+	 * 		When the writer receives invalid input, throw IOException.
+	 */
 	protected abstract void getImages(File f) throws IOException;
 	
+	/**
+	 * Return the images from the given source.
+	 * 
+	 * @param imageSource
+	 * 		The source from which the images need to be retrieved.
+	 * 
+	 * @throws UnknownHostException
+	 * 		When the host cannot be resolved, throw UnknownHostException.
+	 * @throws IOException
+	 * 		When the writer receives invalid input, throw IOException.
+	 */
 	protected abstract void getImage(String imageSource) throws UnknownHostException, IOException;
 	
+	/**
+	 * Handle the PUT- or POST-response.
+	 * 
+	 * @throws IOException
+	 * 		When the writer receives invalid input, throw IOException.
+	 */
 	protected void handlePutPostResponse() throws IOException{
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Give a String for input, please:");
