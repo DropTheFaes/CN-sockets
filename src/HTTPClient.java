@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class HTTPClient {
 
 	/**
-	 * Main method to set up HTTPClient
+	 * Main method to set up HTTPClient.
 	 * 
 	 * @param args[0] = command
 	 * 		The HTTP-command that needs to be executed.
