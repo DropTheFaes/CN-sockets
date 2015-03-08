@@ -41,11 +41,11 @@ public abstract class HTTP {
 		this.command = command;
 		this.port = port;
 		this.url = givenURL.split("/")[0];	
-		if(givenUrl.split("/").length < 2){
+		if(givenURL.split("/").length < 2){
 			this.path = "";
 		}
 		else{
-			this.path = givenUrl.replace(url, "");
+			this.path = givenURL.replace(url, "");
 			this.path = (String) this.path.subSequence(1, this.path.length()-1);
 		}
 
