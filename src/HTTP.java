@@ -63,7 +63,7 @@ public abstract class HTTP {
 			setSocket();	
 	        
 	        String sentence = this.command + " /" + this.path + " HTTP/1." + this.getHttpVersion(); //sentence is wat naar de server gestuurd moet worden
-        	this.outToServer.writeBytes(sentence + '\n');
+        	sendSentence(sentence);
 		        	        
 		} catch (UnknownHostException e) {
 			// TODO juist?
@@ -76,7 +76,32 @@ public abstract class HTTP {
 	
 	public abstract void setSocket() throws UnknownHostException, IOException;
 	
-	public abstract void handleResponse() throws IOException;
+	public abstract void sendSentence(String sentence) throws IOException;
+	
+	public void handleResponse() throws IOException{
+		switch (this.command){
+			case "HEAD":
+				outToServer.writeBytes("\n");
+				handleHeadResponse();
+				break;
+			case "GET":
+				//nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
+				handleGetResponse();
+				break;
+			case "PUT":
+				outToServer.writeBytes("\n");
+				handlePutPostResponse();
+				break;
+			case "POST":
+				outToServer.writeBytes("\n");
+				handlePutPostResponse();
+				break;
+		}
+		this.socket.close(); 
+		outToServer.close();
+		inFromServer.close();
+		dataInFromServer.close();
+	}
 	
 	/**
 	 * Handle the HEAD-response.
@@ -185,7 +210,7 @@ public abstract class HTTP {
 				
 		String getImageSentence = "GET " + imageSource +" HTTP/1." + getHttpVersion() + "\n";
 		try {
-			outToServer.writeBytes(getImageSentence + "\n");
+			sendSentence(getImageSentence);
 		} catch (Exception e) {
 			System.out.println("2"); //TODO check
 		}

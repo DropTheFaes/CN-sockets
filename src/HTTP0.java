@@ -51,38 +51,42 @@ public class HTTP0 extends HTTP{
         this.dataInFromServer = new DataInputStream(socket.getInputStream());
 	}
 	
-	/**
-	 * Handle the response from the command.
-	 * 
-	 * @throws IOException
-	 * 		If the command is not known, throw IOException.
-	 */
-	@Override
-	public void handleResponse() throws IOException{
-		switch (this.command){
-			case "HEAD":
-				outToServer.writeBytes("\n");
-				handleHeadResponse();
-				break;
-			case "GET":
-				//nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
-				handleGetResponse();
-				break;
-			case "PUT":
-				outToServer.writeBytes("\n");
-				handlePutPostResponse();
-				break;
-			case "POST":
-				outToServer.writeBytes("\n");
-				handlePutPostResponse();
-				break;
-		}
-		this.socket.close(); 
-		outToServer.close();
-		inFromServer.close();
-		dataInFromServer.close();
+	public void sendSentence(String sentence) throws IOException{
+		this.outToServer.writeBytes(sentence + "\n");
 	}
 	
+//	/**
+//	 * Handle the response from the command.
+//	 * 
+//	 * @throws IOException
+//	 * 		If the command is not known, throw IOException.
+//	 */
+//	@Override
+//	public void handleResponse() throws IOException{
+//		switch (this.command){
+//			case "HEAD":
+//				outToServer.writeBytes("\n");
+//				handleHeadResponse();
+//				break;
+//			case "GET":
+//				//nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
+//				handleGetResponse();
+//				break;
+//			case "PUT":
+//				outToServer.writeBytes("\n");
+//				handlePutPostResponse();
+//				break;
+//			case "POST":
+//				outToServer.writeBytes("\n");
+//				handlePutPostResponse();
+//				break;
+//		}
+//		this.socket.close(); 
+//		outToServer.close();
+//		inFromServer.close();
+//		dataInFromServer.close();
+//	}
+//	
 //	/**
 //	 * Handle the GET-response for HTTP 1.0.
 //	 * 

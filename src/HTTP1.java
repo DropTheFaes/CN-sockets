@@ -34,33 +34,37 @@ public class HTTP1 extends HTTP{
 		}
 	}
 	
-	@Override
-	public void handleResponse() throws IOException{
+	public void sendSentence(String sentence) throws IOException{
+		this.outToServer.writeBytes(sentence + "\n");
 		outToServer.writeBytes("Host: " + this.url + "\n");
-		switch (this.command){
-			case "HEAD":
-				outToServer.writeBytes("\n");
-				handleHeadResponse();
-				break;
-			case "GET":
-				//nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
-				handleGetResponse();
-				break;
-			case "PUT":
-				outToServer.writeBytes("\n");
-				handlePutPostResponse();
-				break;
-			case "POST":
-				outToServer.writeBytes("\n");
-				handlePutPostResponse();
-				break;
-		}
-		this.socket.close(); 
-		outToServer.close();
-		inFromServer.close();
-		dataInFromServer.close();
 	}
 	
+//	@Override
+//	public void handleResponse() throws IOException{
+//		switch (this.command){
+//			case "HEAD":
+//				outToServer.writeBytes("\n");
+//				handleHeadResponse();
+//				break;
+//			case "GET":
+//				//nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
+//				handleGetResponse();
+//				break;
+//			case "PUT":
+//				outToServer.writeBytes("\n");
+//				handlePutPostResponse();
+//				break;
+//			case "POST":
+//				outToServer.writeBytes("\n");
+//				handlePutPostResponse();
+//				break;
+//		}
+//		this.socket.close(); 
+//		outToServer.close();
+//		inFromServer.close();
+//		dataInFromServer.close();
+//	}
+//	
 //	/**
 //	 * Handle the GET-response for HTTP 1.1.
 //	 * 
