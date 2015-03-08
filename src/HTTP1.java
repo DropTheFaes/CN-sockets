@@ -12,20 +12,19 @@ public class HTTP1 extends HTTP{
 	@Override
 	protected void handleResponse() throws IOException{
 		outToServer.writeBytes("Host: " + this.url);
+		outToServer.writeBytes("\n");
 		switch (this.command){
 			case "HEAD":
-				outToServer.writeBytes("\n");
 				handleHeadResponse();
 				break;
 			case "GET":
 				handleGetResponse();
 				break;
 			case "PUT":
-				outToServer.writeBytes("\n");
 				handlePutPostResponse();
 				break;
 			case "POST":
-				outToServer.writeBytes("\n");
+				handlePutPostResponse();
 				break;
 		}
 	}

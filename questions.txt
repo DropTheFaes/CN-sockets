@@ -1,0 +1,8 @@
+GET http/1.1
+duplicated code EXTERMINAAAAAATEN
+If-modified-since
+images opslaan in relatief pad
+
+SERVER
+
+in OZ: images deftig getten
