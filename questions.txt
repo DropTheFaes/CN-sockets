@@ -1,8 +1,19 @@
 GET http/1.1
-duplicated code EXTERMINAAAAAATEN
-If-modified-since
+header eruit bij GET
+!! header eruit bij GET bij image getten??
+
+rekening houden met If-Modified-Since:
+	de eerste keer waarop we een pagina requesten met GET moeten we hem zoiezo binnenhalen, 
+	maar als we de pagina al eens hebben gerequest en opgeslagen, 
+	moeten we eerst controleren of die pagina is gemodified sinds dan, 
+	als dat niet zo is, hebben we ze al, 
+	als ze wel is gemodified moeten we ze opnieuw getten GET doet dat automatisch met de 'If-Modified-Since'-header die we sturen na de eerste 'enter' na de GET-request
+
 images opslaan in relatief pad
 
 SERVER
 
+code opkuisen
+
 in OZ: images deftig getten
+

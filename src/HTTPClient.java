@@ -47,9 +47,15 @@ public class HTTPClient {
 		else if(httpVersion == 1){
 			http = new HTTP1(command, url, port);
 		}
+		
 		http.sendRequest();
 		
-				
+		try {
+			http.handleResponse();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}			
 	}
 
 }
