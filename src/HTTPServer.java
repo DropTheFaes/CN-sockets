@@ -7,14 +7,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
-
-
-
 public class HTTPServer {
 	
 	public static void main(String[] args) throws IOException {
 		
 		Scanner scanner = new Scanner(System.in);
+		
 		
 		while(args.length != 1) {
 			System.out.println("Please enter exactly one argument, namely the port number: ");			
@@ -29,7 +27,8 @@ public class HTTPServer {
 		while(true) {
 			Socket socket = initialSocket.accept();
 			if(socket != null) {
-				Handler request = new Handler(socket); //TODO Handler klasse maken!
+				BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				ServerHTTP request = new ServerHTTP(socket); //TODO Handler klasse maken!
 				Thread thread = new Thread(request);
 				thread.start();
 			}
