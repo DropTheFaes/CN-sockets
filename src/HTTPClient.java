@@ -57,7 +57,7 @@ public class HTTPClient {
 		try {
 			http.handleResponse();
 		}
-		//If that fails, throw an IOException.
+		//If that fails, it throws an IOException.
 		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -98,8 +98,7 @@ public abstract class HTTP {
 				break;
 			//If the command is a GET-request, pass the request to the GET-handler.
 			case "GET":
-				//TODO nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
-				//TODO uitleg vragen! snap de TODO niet helemaal :3
+				//nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
 				handleGetResponse();
 				break;
 			//If the command is a PUT-request, pass the request to the PUT- & POST-handler.
@@ -159,8 +158,7 @@ public abstract class HTTP {
 		if (this.path == ""){
 			f = new File(siteURL + ".html");
 		}
-		//Write a file with the contents of the path to a new file.
-		//TODO klopt dit?
+		//Open a file with the url as the name.
 		else{
 			f = new File(siteURL + "/" + this.path);
 		}
@@ -243,8 +241,7 @@ public abstract class HTTP {
 		Document doc = Jsoup.parse(f, "UTF-8");
 		Elements images = doc.select("img");
 		
-		//Retrieve the image from the source.
-		//TODO klopt dit?
+		//Retrieve the sources of the images and get them.
 		for(Element image: images){
 			getImage(image.attr("src"));
 		}
@@ -272,16 +269,8 @@ public abstract class HTTP {
 		FileOutputStream toFile = new FileOutputStream(imageName);
 				
 		String getImageSentence = "GET " + imageSource +" HTTP/1." + getHttpVersion() + "\n";
-		//Try to send the request to get an image from the given source from the given HTTP-version.
-		try {
-			sendSentence(getImageSentence);
-		} 
-		//If the host cannot be resolved, or the image source is invalid, throw an exception.
-		catch (Exception e) {
-			System.out.println("2"); //TODO check
-		}
 		
-		//TODO checken wanneer header gedaan is, zodat enkel image-bytes in de image-file opgeslagen worden
+		sendSentence(getImageSentence);
 		
 		ArrayList<String> header = readHeader();
 		
@@ -307,7 +296,7 @@ public abstract class HTTP {
 //		}
 //		byte [] imageResponse = outPutStream.toByteArray();
 //		//Write the image to a file.
-//		toFile.write(image); //TODO misschien zit hier de fout? NAKIJKEN!
+//		toFile.write(image);
 		
 		ImageIO.write(image, imageKind, toFile);
 		

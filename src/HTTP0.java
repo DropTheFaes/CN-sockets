@@ -30,7 +30,6 @@ public class HTTP0 extends HTTP{
 	@Override
 	public void setSocket() throws UnknownHostException, IOException{
 		//If a socket is already running, close it before creating a new one.
-		//TODO reden bijzetten!
 		if(this.socket != null){
 			this.socket.close(); 
 			outToServer.close();
