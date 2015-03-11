@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 public class HTTP0 extends HTTP{
 	
 	/**
-	 * Initialize the HTTP-version to HTTP 1.0 with the given command, given url and given port.
+	 * Initialize the HTTP-version to HTTP version 1.0 with the given command, given url and given port.
 	 * 
 	 * @param command
 	 * 		The command that needs to be handled.
@@ -25,22 +25,28 @@ public class HTTP0 extends HTTP{
 
 	/**
 	 * Is called everytime a connection to a server is needed.
-	 * In the case of HTTP1.0 there should be a new socket evrytime this happens.
+	 * In the case of HTTP1.0 there should be a new socket everytime this happens.
 	 */
 	@Override
 	public void setSocket() throws UnknownHostException, IOException{
+		//If a socket is already running, close it before creating a new one.
+		//TODO reden bijzetten!
 		if(this.socket != null){
 			this.socket.close(); 
 			outToServer.close();
 			inFromServer.close();
 			dataInFromServer.close();
 		}
+		//Create a new socket and all the needed attributes.
 		this.socket = new Socket(this.url, this.port);
 		this.outToServer = new DataOutputStream(this.socket.getOutputStream());
         this.inFromServer = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
         this.dataInFromServer = new DataInputStream(socket.getInputStream());
 	}
 	
+	/**
+	 * Send the given sentence (command, URI and HTTP-version to the server. 
+	 */
 	public void sendSentence(String sentence) throws IOException{
 		this.outToServer.writeBytes(sentence + "\n");
 	}
@@ -117,9 +123,9 @@ public class HTTP0 extends HTTP{
 //	}
 //	
 	/**
-	 * Return the HTTP-version.
+	 * Return the HTTP-version that is used.
 	 * 
-	 * @return The HTTP-version.
+	 * @return The HTTP-version that is used.
 	 */
 	@Override
 	protected int getHttpVersion() {

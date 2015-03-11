@@ -21,22 +21,28 @@ public class HTTPClient {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		try{
+			//Check to see if there are 4 arguments (command, URI, the port to connect to and the HTTP-version) 
 			while(args.length != 4){
 				System.out.println("Give 4 arguments please!");
 				args = br.readLine().split(" ");
 			}
 			br.close();
-		}catch (IOException e) {
+		}
+		//If the given input is invalid, throw an IOException.
+		catch (IOException e) {
 			//TODO hoe catchen?
+			System.out.println("The given input was invalid. Closing.")
     		e.printStackTrace();
     		System.exit(0);
     	}
 		
+		//Initialize the command, URL and port to the input received from the console.
 		String command = args[0];
 		String url = args[1];
 		int port = Integer.parseInt(args[2]);
 		int httpVersion = Integer.parseInt(args[3].substring(7, 8));
 		
+		//Set the HTTP-version according to the version that was entered in the console.
 		HTTP http = null;
 		if(httpVersion == 0){
 			http = new HTTP0(command, url, port);
@@ -47,9 +53,12 @@ public class HTTPClient {
 		
 		http.sendRequest();
 		
+		//Try to handle the response.
 		try {
 			http.handleResponse();
-		} catch (IOException e) {
+		}
+		//If that fails, throw an IOException.
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}			
