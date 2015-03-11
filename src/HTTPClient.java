@@ -31,7 +31,7 @@ public class HTTPClient {
 		//If the given input is invalid, throw an IOException.
 		catch (IOException e) {
 			//TODO hoe catchen?
-			System.out.println("The given input was invalid. Closing.")
+			System.out.println("The given input was invalid. Closing.");
     		e.printStackTrace();
     		System.exit(0);
     	}

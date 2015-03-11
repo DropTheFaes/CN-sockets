@@ -133,7 +133,6 @@ public abstract class HTTP {
 			response.add(line);
 		}//TODO tot hier
 		//Write the response lines to the headResponse.txt-file
-
 		for (String responseLine : response) {
 			System.out.println(responseLine);
 			writer.println(responseLine);
