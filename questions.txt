@@ -17,3 +17,4 @@ code opkuisen
 
 in OZ: images deftig getten
 
+TODO's samen overlopen
