@@ -109,11 +109,11 @@ public abstract class HTTP {
 	 */
 	protected void handleHeadResponse() throws IOException{
 		PrintWriter writer = new PrintWriter("headResponse.txt");
-		ArrayList<String> response = new ArrayList<String>();
+		ArrayList<String> response = new ArrayList<String>(); //TODO vanaf hier: readHeader()
 		String line = null;
 		while((line = this.inFromServer.readLine()) != null){
 			response.add(line);
-		}
+		}//TODO tot hier
 		for (String responseLine : response) {
 			System.out.println(responseLine);
 			writer.println(responseLine);
@@ -128,6 +128,8 @@ public abstract class HTTP {
 	 * 		If the writer receives invalid input, throw IOException.
 	 */
 	protected void handleGetResponse() throws IOException{
+		readHeader();
+		
 		//url splitten op punten, zodat we 'google' of 'example' kunnen gebruiken in de filename van de file waarin we de html-file opslaan
 		String siteURL = url.split("\\.")[0];
 		if (siteURL.equals("www")){
@@ -152,6 +154,15 @@ public abstract class HTTP {
 		readHtmlPage(f);
 		
 		getImages(f);
+	}
+	
+	protected ArrayList<String> readHeader() throws IOException{
+		ArrayList<String> header = new ArrayList<String>();
+		String line = null;
+		while((line = this.inFromServer.readLine()) != null){ //TODO niet tot == null, maar tot lege lijn
+			header.add(line);
+		}
+		return header;
 	}
 	
 	protected void readHtmlPage(File f) throws IOException{
