@@ -1,4 +1,6 @@
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -10,6 +12,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.imageio.ImageIO;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -70,12 +74,10 @@ public abstract class HTTP {
 		}
 		//If the given host does not exist, throw an UnknownHostException.
 		catch (UnknownHostException e) {
-			// TODO juist?
 			System.out.println("No HTTP server found on this host.");
 		}
 		//If the port number is incorrect, throw an IOException.
 		catch (IOException e) {
-			// TODO juist?
 			System.out.println("No server found on this port number.");
 		}
 	}
@@ -96,8 +98,7 @@ public abstract class HTTP {
 				break;
 			//If the command is a GET-request, pass the request to the GET-handler.
 			case "GET":
-				//TODO nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
-				//TODO uitleg vragen! snap de TODO niet helemaal :3
+				//nog geen 2e 'newline' --> als we if-modified-since moeten opvragen moet dat er nog tussen
 				handleGetResponse();
 				break;
 			//If the command is a PUT-request, pass the request to the PUT- & POST-handler.
@@ -126,12 +127,7 @@ public abstract class HTTP {
 	 */
 	protected void handleHeadResponse() throws IOException{
 		PrintWriter writer = new PrintWriter("headResponse.txt");
-		ArrayList<String> response = new ArrayList<String>(); //TODO vanaf hier: readHeader()
-		String line = null;
-		//While the next line contains text, add it to the response.
-		while((line = this.inFromServer.readLine()) != null){
-			response.add(line);
-		}//TODO tot hier
+		ArrayList<String> response = readHeader();
 		//Write the response lines to the headResponse.txt-file
 		for (String responseLine : response) {
 			System.out.println(responseLine);
@@ -162,8 +158,7 @@ public abstract class HTTP {
 		if (this.path == ""){
 			f = new File(siteURL + ".html");
 		}
-		//Write a file with the contents of the path to a new file.
-		//TODO klopt dit?
+		//Open a file with the url as the name.
 		else{
 			f = new File(siteURL + "/" + this.path);
 		}
@@ -182,10 +177,30 @@ public abstract class HTTP {
 
 	protected ArrayList<String> readHeader() throws IOException{
 		ArrayList<String> header = new ArrayList<String>();
-		String line = null;
-		while((line = this.inFromServer.readLine()) != null){ //TODO niet tot == null, maar tot lege lijn
-			header.add(line);
+		
+		byte[] b = new byte[1];
+		String currentString = "";
+		String newChar;
+		int line;
+		
+		while((line = this.dataInFromServer.read(b, 0, 1)) != -1){
+			newChar = new String(b, 0, line);
+			if((newChar.contains("\n")  || newChar.contains("\r") )){
+				if((header.size() == 0 && currentString != "") || header.size() != 0)
+					header.add(currentString);
+				currentString = "";
+			}else
+				currentString += newChar;
+			
+			if(header.size() > 2 && (header.get(header.size()-1).equals("") && header.get(header.size()-2).equals("")))
+				break;
 		}
+		
+		//in geval dat er nog rommel staa voor het begin van de header
+		while(!header.get(0).contains("HTTP")){
+			header.remove(0);
+		}
+		
 		return header;
 	}
 	
@@ -226,8 +241,7 @@ public abstract class HTTP {
 		Document doc = Jsoup.parse(f, "UTF-8");
 		Elements images = doc.select("img");
 		
-		//Retrieve the image from the source.
-		//TODO klopt dit?
+		//Retrieve the sources of the images and get them.
 		for(Element image: images){
 			getImage(image.attr("src"));
 		}
@@ -250,30 +264,41 @@ public abstract class HTTP {
 		setSocket();
 		
 		String imageName = imageSource.split("/")[imageSource.split("/").length-1];
+		String imageKind = imageName.split("\\.")[1];
 		ByteArrayOutputStream outPutStream = new ByteArrayOutputStream();
 		FileOutputStream toFile = new FileOutputStream(imageName);
 				
 		String getImageSentence = "GET " + imageSource +" HTTP/1." + getHttpVersion() + "\n";
-		//Try to send the request to get an image from the given source from the given HTTP-version.
-		try {
-			sendSentence(getImageSentence);
-		} 
-		//If the host cannot be resolved, or the image source is invalid, throw an exception.
-		catch (Exception e) {
-			System.out.println("2"); //TODO check
+		
+		sendSentence(getImageSentence);
+		
+		ArrayList<String> header = readHeader();
+		
+		int nbBytes = -1;
+		String[] headerLine;
+		for(String property: header){
+			headerLine = property.split(" ");
+			if(headerLine[0].contains("Content-Length")){
+				nbBytes = Integer.parseInt(headerLine[1]);
+				break;
+			}
 		}
 		
-		//TODO checken wanneer header gedaan is, zodat enkel image-bytes in de image-file opgeslagen worden
 		
-		byte[] buffer = new byte[2048];
-		int n;
-		//Write the image to a buffer.
-		while((n = dataInFromServer.read(buffer)) != -1){
-			outPutStream.write(buffer,0,n);
-		}
-		byte [] imageResponse = outPutStream.toByteArray();
-		//Write the image to a file.
-		toFile.write(imageResponse); //TODO misschien zit hier de fout? NAKIJKEN!
+		byte[] buffer = new byte[nbBytes];
+		dataInFromServer.read();
+		dataInFromServer.readFully(buffer);
+		BufferedImage image = ImageIO.read(new ByteArrayInputStream(buffer));
+//		int n;
+//		//Write the image to a buffer.
+//		while((n = dataInFromServer.read(buffer)) != -1){
+//			outPutStream.write(buffer,0,n);
+//		}
+//		byte [] imageResponse = outPutStream.toByteArray();
+//		//Write the image to a file.
+//		toFile.write(image);
+		
+		ImageIO.write(image, imageKind, toFile);
 		
 		outPutStream.close();
 		toFile.close();
